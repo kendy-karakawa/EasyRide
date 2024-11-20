@@ -19,7 +19,7 @@ model Driver {
   name     String
   description String
   car      String
-  rating   Float?    // Média das avaliações (atualizada via lógica)
+  //rating   Float?    // Média das avaliações (atualizada via lógica)
   rate     Float
   minKm    Int       
   rides    Ride[]    // Relacionamento com Ride
@@ -49,10 +49,8 @@ model Customer {
 
 model Ride {
   id              Int       @id @default(autoincrement())
-  originLatitude  Float
-  originLongitude Float
-  destinationLatitude  Float
-  destinationLongitude Float
+  origin          String
+  destination     String
   distance        Int
   duration        String
   customerId      Int       @map("custimerId") // Corrigido typo para "customerId"
