@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Driver {
+  id       Int       @id @default(autoincrement())
+  name     String
+  description String
+  car      String
+  rating   Float?    // Média das avaliações (atualizada via lógica)
+  rate     Float
+  minKm    Int       
+  rides    Ride[]    // Relacionamento com Ride
+  reviews  DriverRating[] // Relacionamento com DriverRating
+}
+
+model Review {
+  id      Int     @id @default(autoincrement())
+  rating  Float   // Avaliação de 0 a 5
+  comment String? // Comentário opcional
+  drivers DriverRating[] // Relacionamento com DriverRating
+}
+
+model DriverRating {
+  id        Int     @id @default(autoincrement())
+  driverId  Int
+  reviewId  Int
+  driver    Driver  @relation(fields: [driverId], references: [id])
+  review    Review  @relation(fields: [reviewId], references: [id])
+}
+
+model Customer {
+  id    Int       @id @default(autoincrement())
+  name  String
+  rides Ride[]    // Relacionamento com Ride
+}
+
+model Ride {
+  id              Int       @id @default(autoincrement())
+  originLatitude  Float
+  originLongitude Float
+  destinationLatitude  Float
+  destinationLongitude Float
+  distance        Int
+  duration        String
+  customerId      Int       @map("custimerId") // Corrigido typo para "customerId"
+  driverId        Int
+  timeStamp       DateTime  @map("timeStamp") // Representado como DateTime
+  value           Int
+  customer        Customer  @relation(fields: [customerId], references: [id])
+  driver          Driver    @relation(fields: [driverId], references: [id])
+}
