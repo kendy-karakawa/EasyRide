@@ -15,10 +15,26 @@ export function handleApplicationErrors(
         return;
     }
 
+    if (err.error_code === "INVALID_DRIVER") {
+        res.status(400).send({
+            error_code: "INVALID_DRIVER",
+            error_description: "Motorista invalido."
+        });
+        return;
+    }
+
     if (err.error_code === "DRIVER_NOT_FOUND") {
         res.status(404).send({
             error_code: "DRIVER_NOT_FOUND",
             error_description: "Motorista não encontrado."
+        });
+        return;
+    }
+
+    if (err.error_code === "NO_RIDES_FOUND") {
+        res.status(404).send({
+            error_code: "NO_RIDES_FOUND",
+            error_description: "Nenhum registro encontrado."
         });
         return;
     }

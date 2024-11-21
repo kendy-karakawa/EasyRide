@@ -11,10 +11,14 @@ export const rideConfirmSchema = Joi.object({
     origin: Joi.string().required(),
     destination: Joi.string().required(),
     distance: Joi.number().required(),
-    duration: Joi.string().required(),
+    duration: Joi.number().required(),
     driver: Joi.object({ 
         id: Joi.number().required(), 
         name: Joi.string().required() 
       }).required(),
       value: Joi.number().required()
 });
+
+export const getRideHistorySchemas = Joi.object({
+    customer_id: Joi.number().required()
+  });

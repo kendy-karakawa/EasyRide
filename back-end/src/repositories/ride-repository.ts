@@ -11,14 +11,39 @@ async function createRide(data: ConfirmRideParams) {
             customerId: parseInt(data.customer_id), 
             driverId: data.driver.id, 
             value: data.value,
-            timeStamp: new Date() 
+            timestamp: new Date() 
         }
     });
 };
 
+async function getRidesByCustomerId(customerId: number) {
+    return await prisma.ride.findMany({
+        where: {
+            customerId
+        }, 
+        include: {
+            driver: true
+        }
+    });
+};
+
+async function getRidesByCustomerIdAndDriverId(customerId: number, driverId: number) {
+    return await prisma.ride.findMany({
+        where: {
+            customerId,
+            driverId
+        },
+        include: {
+            driver: true
+        }
+    });
+}
+
 
 const rideRepository = {
-    createRide
+    createRide,
+    getRidesByCustomerId,
+    getRidesByCustomerIdAndDriverId
 };
 
 export default rideRepository;

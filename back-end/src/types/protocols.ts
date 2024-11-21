@@ -8,7 +8,7 @@ export type ConfirmRideParams = {
     origin: string, 
     destination: string, 
     distance: number, 
-    duration: string, 
+    duration: number, 
     driver: 
         { 
             id: number, 

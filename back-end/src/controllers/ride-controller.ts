@@ -21,11 +21,31 @@ async function confirmRide(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function getRideHistory(req: Request, res: Response, next: NextFunction) {
+    const customerId: string = req.params.customer_id;
+    const driverId: string = req.query.driver_id as string;
 
+    try {
+        const rides = await rideService.getRideHistory(parseInt(customerId), parseInt(driverId));
+        res.status(200).send(rides)
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function invalideRoute(req: Request, res: Response) {
+    res.status(400).json(
+        {
+            error_code: "INVALID_DATA",
+            error_description: "O parâmetro 'customer_id' é obrigatório e não pode estar vazio."
+        });
+}
 
 const rideController = {
     getEstimate,
-    confirmRide
+    confirmRide,
+    getRideHistory,
+    invalideRoute
 };
 
 export default rideController;

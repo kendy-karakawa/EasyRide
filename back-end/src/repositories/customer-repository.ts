@@ -8,9 +8,18 @@ async function createCustomer(name: string) {
     });
 };
 
+async function getCustomerById(customerId:number) {
+    return await prisma.customer.findFirst({
+        where: {
+            id: customerId
+        }
+    });
+};
+
 
 const customerRepository = {
-    createCustomer
+    createCustomer,
+    getCustomerById
 };
 
 export default customerRepository;
