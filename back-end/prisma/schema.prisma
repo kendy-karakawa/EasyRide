@@ -15,48 +15,40 @@ datasource db {
 
 
 model Driver {
-  id       Int       @id @default(autoincrement())
-  name     String
+  id          Int     @id @default(autoincrement())
+  name        String
   description String
-  car      String
-  //rating   Float?    // Média das avaliações (atualizada via lógica)
-  rate     Float
-  minKm    Int       
-  rides    Ride[]    // Relacionamento com Ride
-  reviews  DriverRating[] // Relacionamento com DriverRating
+  car         String
+  rate        Float
+  minKm       Int
+  rides       Ride[]  
+  review      Review? 
 }
 
 model Review {
-  id      Int     @id @default(autoincrement())
-  rating  Float   // Avaliação de 0 a 5
-  comment String? // Comentário opcional
-  drivers DriverRating[] // Relacionamento com DriverRating
-}
-
-model DriverRating {
-  id        Int     @id @default(autoincrement())
-  driverId  Int
-  reviewId  Int
-  driver    Driver  @relation(fields: [driverId], references: [id])
-  review    Review  @relation(fields: [reviewId], references: [id])
+  id       Int     @id @default(autoincrement())
+  rating   Float   
+  comment  String? 
+  driverId Int     @unique 
+  driver   Driver  @relation(fields: [driverId], references: [id])
 }
 
 model Customer {
   id    Int       @id @default(autoincrement())
   name  String
-  rides Ride[]    // Relacionamento com Ride
+  rides Ride[]   
 }
 
 model Ride {
-  id              Int       @id @default(autoincrement())
-  origin          String
-  destination     String
-  distance        Int
-  duration        String
-  customerId      Int       @map("custimerId") // Corrigido typo para "customerId"
-  driverId        Int
-  timeStamp       DateTime  @map("timeStamp") // Representado como DateTime
-  value           Int
-  customer        Customer  @relation(fields: [customerId], references: [id])
-  driver          Driver    @relation(fields: [driverId], references: [id])
+  id          Int       @id @default(autoincrement())
+  origin      String
+  destination String
+  distance    Int
+  duration    Int        // Tempo em minutos
+  customerId  Int
+  driverId    Int
+  timestamp   DateTime
+  value       Decimal    // Valores monetários
+  customer    Customer   @relation(fields: [customerId], references: [id])
+  driver      Driver     @relation(fields: [driverId], references: [id])
 }

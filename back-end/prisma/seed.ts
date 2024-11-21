@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Criando motoristas
+  // Criando motoristas com avaliações associadas
   const homer = await prisma.driver.create({
     data: {
       name: "Homer Simpson",
@@ -12,6 +12,12 @@ async function main() {
       car: "Plymouth Valiant 1973 rosa e enferrujado",
       rate: 2.5,
       minKm: 1,
+      review: {
+        create: {
+          rating: 2.0,
+          comment: "Motorista simpático, mas errou o caminho 3 vezes. O carro cheira a donuts.",
+        },
+      },
     },
   });
 
@@ -23,6 +29,13 @@ async function main() {
       car: "Dodge Charger R/T 1970 modificado",
       rate: 5.0,
       minKm: 5,
+      review: {
+        create: {
+          rating: 4.0,
+          comment:
+            "Que viagem incrível! O carro é um show à parte e o motorista, apesar de ter uma cara de poucos amigos, foi super gente boa. Recomendo!",
+        },
+      },
     },
   });
 
@@ -33,53 +46,19 @@ async function main() {
       car: "Aston Martin DB5 clássico",
       rate: 10.0,
       minKm: 10,
+      review: {
+        create: {
+          rating: 5.0,
+          comment:
+            "Serviço impecável! O motorista é a própria definição de classe e o carro é simplesmente magnífico. Uma experiência digna de um agente secreto.",
+        },
+      },
     },
   });
 
-  console.log("Motoristas criados com sucesso!");
-
-  // Criando avaliações
-  await prisma.review.createMany({
-    data: [
-      {
-        rating: 2.0,
-        comment: "Motorista simpático, mas errou o caminho 3 vezes. O carro cheira a donuts.",
-      },
-      {
-        rating: 4.0,
-        comment:
-          "Que viagem incrível! O carro é um show à parte e o motorista, apesar de ter uma cara de poucos amigos, foi super gente boa. Recomendo!",
-      },
-      {
-        rating: 5.0,
-        comment:
-          "Serviço impecável! O motorista é a própria definição de classe e o carro é simplesmente magnífico. Uma experiência digna de um agente secreto.",
-      },
-    ],
-  });
-
-  console.log("Avaliações criadas com sucesso!");
-
-  // Associando avaliações aos motoristas
-  await prisma.driverRating.createMany({
-    data: [
-      {
-        driverId: homer.id,
-        reviewId: 1, // ID da avaliação para Homer
-      },
-      {
-        driverId: dominic.id,
-        reviewId: 2, // ID da avaliação para Dominic
-      },
-      {
-        driverId: james.id,
-        reviewId: 3, // ID da avaliação para James
-      },
-    ],
-  });
-
-  console.log("Avaliações associadas aos motoristas com sucesso!");
+  console.log("Motoristas e avaliações criados com sucesso!");
 }
+
 
 main()
   .catch((e) => {
