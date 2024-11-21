@@ -8,9 +8,18 @@ async function getDriverById (driverId: number) {
     })
 };
 
+async function findAll() {
+    return await prisma.driver.findMany({
+        include: {
+            review: true
+        }
+    })
+}
+
 
 const driverRepository = {
-    getDriverById
+    getDriverById,
+    findAll
 };
 
 export default driverRepository;
