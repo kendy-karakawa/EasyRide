@@ -36,7 +36,8 @@ async function getRideHistory(customerId: number, driverId: number | undefined )
             }
         })
     }
-    return response;
+
+    return response.rides.sort((a: any, b: any) => b.date - a.date);
 }
 
 async function getRidesForCustomer(customerId: number) {
