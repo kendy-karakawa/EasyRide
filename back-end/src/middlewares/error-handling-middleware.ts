@@ -23,18 +23,10 @@ export function handleApplicationErrors(
         return;
     }
 
-    if (err.error_code === "DRIVER_NOT_FOUND") {
+    if (err.error_code === "DRIVER_NOT_FOUND" || err.error_code === "GOOGLE_API_KEY_NOT_FOUND" || err.error_code === "NO_RIDES_FOUND") {
         res.status(404).send({
-            error_code: "DRIVER_NOT_FOUND",
-            error_description: "Motorista não encontrado."
-        });
-        return;
-    }
-
-    if (err.error_code === "NO_RIDES_FOUND") {
-        res.status(404).send({
-            error_code: "NO_RIDES_FOUND",
-            error_description: "Nenhum registro encontrado."
+            error_code: err.error_code,
+            error_description: err.error_description
         });
         return;
     }

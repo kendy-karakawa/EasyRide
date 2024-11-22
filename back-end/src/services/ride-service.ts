@@ -1,12 +1,19 @@
 
 import { invalidDriverError } from "../errors/invalid-driver-error";
 import { notFoundError } from "../errors/not-found-error";
-import customerRepository from "../repositories/customer-repository";
+import googleMapsApi from "../integration/google-maps-api";
 import driverRepository from "../repositories/driver-repository";
 import rideRepository from "../repositories/ride-repository";
-import { ConfirmRideParams } from "../types/protocols";
+import { ConfirmRideParams, RouteResponse, TransformedRouteResponse } from "../types/protocols";
+import customerService from "./customer-service";
 import driverService from "./driver-service";
 
+async function getEstimate(customerId: number, origin: string, destination: string) {
+    await customerService.checkCustomer(customerId);
+    const drivers = await driverService.getAllDrivers();
+    const route = await getRoutes(origin, destination);
+    return {...route, options: drivers};
+}
 
 async function confirmRide( data: ConfirmRideParams) {
     await driverService.checkDriver(data.driver.id, data.distance);
@@ -14,8 +21,7 @@ async function confirmRide( data: ConfirmRideParams) {
 };
 
 async function getRideHistory(customerId: number, driverId: number | undefined ) {
-    const customer = await customerRepository.getCustomerById(customerId);
-    if (!customer) throw notFoundError("NO_RIDES_FOUND", "Nenhum registro encontrado.");
+    await customerService.checkCustomer(customerId);
     const rideHistory = driverId ? await getRidesForCustomerWithDriver(customerId, driverId) : await getRidesForCustomer(customerId);
 
     const response = {
@@ -54,7 +60,31 @@ async function getRidesForCustomerWithDriver(customerId: number, driverId: numbe
     return rides;
 }
 
+async function getRoutes(origin: string, destination: string): Promise<TransformedRouteResponse> {
+    const routes: RouteResponse = await googleMapsApi.getRoutes(origin, destination);
+    return transformRouteResponse(routes);
+}
+
+function transformRouteResponse(response: RouteResponse): TransformedRouteResponse {
+    const leg = response.routes[0]?.legs[0]; 
+
+    return {
+        origin: {
+            latitude: leg.startLocation.latLng.latitude,
+            longitude: leg.startLocation.latLng.longitude,
+        },
+        destination: {
+            latitude: leg.endLocation.latLng.latitude,
+            longitude: leg.endLocation.latLng.longitude,
+        },
+        distance: (leg.distanceMeters/1000),
+        duration: parseInt(leg.duration.replace("s", ""), 10),
+        routeResponse: leg.polyline.encodedPolyline,
+    };
+}
+
 const rideService = {
+    getEstimate,
     confirmRide,
     getRideHistory
 };

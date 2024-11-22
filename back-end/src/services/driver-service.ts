@@ -19,7 +19,8 @@ async function getAllDrivers() {
         rating: driver.review.rating,
         comment: driver.review.comment
       },
-      value: driver.rate
+      value: driver.rate,
+      minKm: driver.minKm
     }));
 
     return formattedDrivers;

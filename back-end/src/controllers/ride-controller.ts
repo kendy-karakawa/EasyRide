@@ -5,7 +5,14 @@ import { ConfirmRideParams } from "../types/protocols";
 
 
 async function getEstimate(req: Request, res: Response) {
-    
+    const {customer_id, origin, destination} = req.body;
+    try {
+        if (origin === destination) throw invalidDataError(['Endereço de origem não pode ser igual ao endereço de destino.']);
+        const response = await rideService.getEstimate(customer_id, origin, destination);
+        res.status(200).json(response);
+    } catch (error) {
+        res.status(400).send(error.response?.data);
+    }
 };
 
 async function confirmRide(req: Request, res: Response, next: NextFunction) {
@@ -41,11 +48,12 @@ async function invalideRoute(req: Request, res: Response) {
         });
 }
 
+
 const rideController = {
     getEstimate,
     confirmRide,
     getRideHistory,
-    invalideRoute
+    invalideRoute,
 };
 
 export default rideController;

@@ -11,6 +11,5 @@ rideRouter
     .patch("/confirm", validateBody(rideConfirmSchema), rideController.confirmRide)
     .get("/:customer_id", validateParams(getRideHistorySchemas), rideController.getRideHistory)
     .get('/', rideController.invalideRoute)
-
-
+    
 export default rideRouter;

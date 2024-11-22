@@ -17,4 +17,40 @@ export type ConfirmRideParams = {
     value: number 
 };
 
-  
+export type TransformedRouteResponse = {
+    origin: {
+      latitude: number;
+      longitude: number;
+    };
+    destination: {
+      latitude: number;
+      longitude: number;
+    };
+    distance: number; 
+    duration: number; 
+    routeResponse: string; 
+  };
+
+export type RouteResponse = {
+    routes: Array<{
+      legs: Array<{
+        distanceMeters: number;
+        duration: string;
+        polyline: {
+          encodedPolyline: string;
+        };
+        startLocation: {
+          latLng: {
+            latitude: number;
+            longitude: number;
+          };
+        };
+        endLocation: {
+          latLng: {
+            latitude: number;
+            longitude: number;
+          };
+        };
+      }>;
+    }>;
+  };
