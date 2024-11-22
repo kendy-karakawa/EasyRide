@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: easyRide
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+
+  api:
+      build:
+        context: ./back-end
+      env_file:
+        - .env
+      environment:
+        DATABASE_URL: postgres://user:password@postgres:5432/database_name
+      ports:
+        - "8080:8080"
+      depends_on:
+        - postgres
+
+volumes:
+  postgres-volume:

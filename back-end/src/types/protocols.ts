@@ -1,3 +1,5 @@
+import Decimal from "decimal.js";
+
 export type ApplicationError = {
     error_code: string;
     error_description?: string;
@@ -53,4 +55,23 @@ export type RouteResponse = {
         };
       }>;
     }>;
-  };
+};
+
+export type Ride = {
+    id: number; 
+    date: Date; 
+    origin: string; 
+    destination: string; 
+    distance: number; 
+    duration: number; 
+    value: Decimal; 
+    driver: {
+      id: number; 
+      name: string; 
+    };
+};
+
+export type RideHistory = {
+    customer_id: number;
+    rides: Ride[];
+}

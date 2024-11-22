@@ -4,7 +4,7 @@ import { notFoundError } from "../errors/not-found-error";
 import googleMapsApi from "../integration/google-maps-api";
 import driverRepository from "../repositories/driver-repository";
 import rideRepository from "../repositories/ride-repository";
-import { ConfirmRideParams, RouteResponse, TransformedRouteResponse } from "../types/protocols";
+import { ConfirmRideParams, Ride, RideHistory, RouteResponse, TransformedRouteResponse } from "../types/protocols";
 import customerService from "./customer-service";
 import driverService from "./driver-service";
 
@@ -20,7 +20,7 @@ async function confirmRide( data: ConfirmRideParams) {
     await rideRepository.createRide(data);
 };
 
-async function getRideHistory(customerId: number, driverId: number | undefined ) {
+async function getRideHistory(customerId: number, driverId: number | undefined ): Promise<RideHistory> {
     await customerService.checkCustomer(customerId);
     const rideHistory = driverId ? await getRidesForCustomerWithDriver(customerId, driverId) : await getRidesForCustomer(customerId);
 
@@ -42,8 +42,8 @@ async function getRideHistory(customerId: number, driverId: number | undefined )
             }
         })
     }
-
-    return response.rides.sort((a: any, b: any) => b.date - a.date);
+    response.rides.sort((a: any, b: any) => b.date - a.date);
+    return response;
 }
 
 async function getRidesForCustomer(customerId: number) {
