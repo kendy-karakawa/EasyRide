@@ -8,7 +8,7 @@ async function GetRrideEstimate(request: GetRrideEstimateRequest): Promise<GetRr
     return res;
 };
 
-async function ConfirmRide (request: ConfirmRideRequest): Promise<ConfirmRideResponse> {
+async function ConfirmRide(request: ConfirmRideRequest): Promise<ConfirmRideResponse> {
     const {data: res} = await axios.patch(`${baseUrl}/confirm`, request);
     return res;
 };

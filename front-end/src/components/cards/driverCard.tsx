@@ -1,25 +1,28 @@
-import { Driver } from '@/types/types';
+import { Driver, SelectDrive } from '@/types/types';
 import { FaStar } from 'react-icons/fa';
 
 
-export default function DriverCard(driver: Driver) {
-    driver = 
-    {
-      "id": 1,
-      "name": "Homer Simpson",
-      "description": "Olá! Sou o Homer, seu motorista camarada! Relaxe e aproveite o passeio, com direito a rosquinhas e boas risadas (e talvez alguns desvios).",
-      "vehicle": "Plymouth Valiant 1973 rosa e enferrujado",
-      "review": {
-        "rating": 2,
-        "comment": "Motorista simpático, mas errou o caminho 3 vezes. O carro cheira a donuts."
-      },
-      "value": 2.5,
-      "minKm": 1
+export default function DriverCard({
+    driver, 
+    distance, 
+    duration, 
+    handleSelectDriver
+}: {driver: Driver, distance: number, duration: number ,handleSelectDriver: (data: SelectDrive)=> void}) { 
+    function handleSelect(){
+        const data: SelectDrive = {
+            driver: {
+                id: driver.id,
+                name: driver.name
+            },
+            distance,
+            duration,
+            value: driver.value * distance
+        }
+        handleSelectDriver(data);
     };
-   
 
     return (
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+        <div className="min-h-[500px] min-w-[300px] bg-white rounded-lg shadow-lg p-6 border border-gray-200">
             {/* Nome do motorista */}
             <h2 className="text-xl font-bold text-gray-800 mb-2">{driver.name}</h2>
 
@@ -51,8 +54,12 @@ export default function DriverCard(driver: Driver) {
             {/* Preço e distância mínima */}
             <div className="mt-4 flex justify-between items-center">
                 <div>
-                <p className="text-sm text-gray-700">Preço por km:</p>
-                <p className="text-lg font-semibold text-gray-800">R$ {driver.value.toFixed(2)}</p>
+                <p className="text-sm text-gray-700">Preço:</p>
+                <p className="text-lg font-semibold text-gray-800">R$ {(driver.value * distance).toFixed(2).replace('.', ',')}</p>
+                </div>
+                <div>
+                <p className="text-sm text-gray-700">tempo</p>
+                <p className="text-lg font-semibold text-gray-800">{Math.floor(duration/60)} min</p>
                 </div>
                 <div>
                 <p className="text-sm text-gray-700">Distância mínima:</p>
@@ -61,7 +68,9 @@ export default function DriverCard(driver: Driver) {
             </div>
 
             {/* Botão */}
-            <button className="mt-6 w-full bg-black text-white py-3 rounded-md text-lg font-medium hover:bg-gray-800">
+            <button className="mt-6 w-full bg-black text-white py-3 rounded-md text-lg font-medium hover:bg-gray-800"
+            onClick={handleSelect}
+            >
                 Escolher
             </button>
         </div>

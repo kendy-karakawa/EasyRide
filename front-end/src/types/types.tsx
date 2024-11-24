@@ -79,5 +79,14 @@ export type RideHistoryResponse = {
     rides: RideHistory[];
 };
 
+export type SelectDrive = {
+    driver: {
+        id: number;
+        name: string;
+    };
+    distance: number;
+    duration: number;
+    value: number;
+}
 
 

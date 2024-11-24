@@ -22,7 +22,6 @@ export default function History(){
           await ApiRide.GetRideHistoryPerDriver(customer_id, driver_id);
         setRides(result.rides);
       } catch (error: any) {
-        console.log(error?.response?.data?.error_description);
         const erro:AlertObj = {
           type: 'warning',
           message: error?.response?.data?.error_description,
@@ -49,7 +48,7 @@ export default function History(){
     return (
         <>
           <Header/>
-          <div className="p-6 pt-20 bg-gray-100 min-h-screen">
+          <div className="p-6 pt-20 bg-gray-100 min-h-[500px]">
             <div className=" mx-auto bg-white shadow-md rounded-lg p-6">
               {alertList.length > 0 && alertList.map((item: AlertObj, index) => (
                 <Alert key={index} alert={item}/>
@@ -106,9 +105,9 @@ export default function History(){
                           <td className="p-3 border-b">{ride.driver.name}</td>
                           <td className="p-3 border-b">{ride.origin}</td>
                           <td className="p-3 border-b">{ride.destination}</td>
-                          <td className="p-3 border-b">{ride.distance} km</td>
-                          <td className="p-3 border-b">{ride.duration} min</td>
-                          <td className="p-3 border-b">R$ {ride.value}</td>
+                          <td className="p-3 border-b">{(ride.distance).toFixed(2).replace('.', ',')} km</td>
+                          <td className="p-3 border-b">{Math.floor(ride.duration/60)} min</td>
+                          <td className="p-3 border-b">R$ {(ride.value * (ride.distance/1000)).toFixed(2).replace('.', ',')}</td>
                         </tr>
                       ))}
                     </tbody>
