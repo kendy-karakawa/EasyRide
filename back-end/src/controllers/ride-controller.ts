@@ -4,14 +4,14 @@ import rideService from "../services/ride-service";
 import { ConfirmRideParams } from "../types/protocols";
 
 
-async function getEstimate(req: Request, res: Response) {
+async function getEstimate(req: Request, res: Response, next: NextFunction) {
     const {customer_id, origin, destination} = req.body;
     try {
         if (origin === destination) throw invalidDataError(['Endereço de origem não pode ser igual ao endereço de destino.']);
         const response = await rideService.getEstimate(customer_id, origin, destination);
         res.status(200).json(response);
     } catch (error) {
-        res.status(400).send(error.response?.data);
+        next(error);
     }
 };
 

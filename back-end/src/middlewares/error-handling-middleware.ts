@@ -9,8 +9,8 @@ export function handleApplicationErrors(
 ) {
     if (err.error_code === "INVALID_DATA") {
         res.status(400).send({
-            error_code: "INVALID_DATA",
-            error_description: "Os dados fornecidos no corpo da requisição são inválidos."
+            error_code: err.error_code,
+            error_description: "Endereço de origem não pode ser igual ao endereço de destino."
         });
         return;
     }

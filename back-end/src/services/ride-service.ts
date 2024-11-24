@@ -5,11 +5,9 @@ import googleMapsApi from "../integration/google-maps-api";
 import driverRepository from "../repositories/driver-repository";
 import rideRepository from "../repositories/ride-repository";
 import { ConfirmRideParams, Ride, RideHistory, RouteResponse, TransformedRouteResponse } from "../types/protocols";
-import customerService from "./customer-service";
 import driverService from "./driver-service";
 
 async function getEstimate(customerId: number, origin: string, destination: string) {
-    await customerService.checkCustomer(customerId);
     const drivers = await driverService.getAllDrivers();
     const route = await getRoutes(origin, destination);
     return {...route, options: drivers};
@@ -21,7 +19,6 @@ async function confirmRide( data: ConfirmRideParams) {
 };
 
 async function getRideHistory(customerId: number, driverId: number | undefined ): Promise<RideHistory> {
-    await customerService.checkCustomer(customerId);
     const rideHistory = driverId ? await getRidesForCustomerWithDriver(customerId, driverId) : await getRidesForCustomer(customerId);
 
     const response = {
