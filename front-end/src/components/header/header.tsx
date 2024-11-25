@@ -12,7 +12,7 @@ export default function Header() {
             <Link href={"/"}>
               <h1 className="text-gray-50 mr-8">Home</h1>
             </Link >
-            <Link href={"/history/1"}>
+            <Link href={"/history/0"}>
               <h1 className="text-gray-50">Minhas viagens</h1>
             </Link >
           </div>

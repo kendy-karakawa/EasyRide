@@ -38,7 +38,7 @@ export default function History(){
     };
     
     useEffect(() => {
-      if (params.id) {
+      if (params.id && Number(params.id) !== 0) {
         setCustomerId(Number(params.id));
         getRideHistory(Number(params.id), 0);
       }

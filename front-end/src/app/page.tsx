@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
-
 import Alert from "@/components/alert/alert";
 import DriverCard from "@/components/cards/driverCard";
 import EstimateForm from "@/components/forms/estimateForm";
 import Header from "@/components/header/header";
 import Map from "@/components/map/map";
-import { AlertObj, ConfirmRideRequest, GetRrideEstimateRequest, GetRrideEstimateResponse, SelectDrive } from '@/types/types';
+import { AlertObj, ConfirmRideRequest, GetRrideEstimateRequest, GetRrideEstimateResponse, RoutesInfo, SelectDrive } from '@/types/types';
 import ApiRide from '@/services/apiRide';
 
 export default function Home() {
@@ -16,6 +15,7 @@ export default function Home() {
   const [alertList, setAlertList] = useState<AlertObj[]>([]);
   const [loading, setLoading] = useState(false);
   const [estimateResponse, setEstimateResponse] = useState<GetRrideEstimateResponse | null>(null);
+  const [routesInfo, setRoutesInfo] = useState<RoutesInfo|null>(null);
   const [estimateInfo, setEstimateInfo] = useState<GetRrideEstimateRequest>({
     customer_id: 0,
     origin:  "",
@@ -26,10 +26,10 @@ export default function Home() {
     try {
       setLoading(true);
       const response: GetRrideEstimateResponse = await ApiRide.GetRrideEstimate(estimateInfo);
-      // const filtro = response.options.filter((item, index, self) => index === self.findIndex((t) => t.name === item.name))
-      // response.options = filtro
       setEstimateResponse(response);
+      setRoutesInfo({origin: response.origin, destination: response.destination, routeResponse: response.routeResponse});
     } catch (error: any) {
+      console.info(error.response)
         const erro:AlertObj = {
           type: 'warning',
           message: error?.response?.data?.error_description,
@@ -90,9 +90,8 @@ export default function Home() {
           </div>
           <div className="w-full md:w-1/2 pl-0 md:pl-6 mt-5 md:mt-0">
             <div className="h-[300px] md:h-[800px]">
-              <Map />
+              {routesInfo ? <Map routesInfo={routesInfo}/> : <img src='../../public/images/staticmap.png'/>}
             </div>
-            
           </div>
         </div>
       </div>

@@ -43,6 +43,12 @@ export type GetRrideEstimateResponse = {
     options: Driver[];
 };
 
+export type RoutesInfo = {
+    origin: Coordinates;
+    destination: Coordinates;
+    routeResponse: string;
+};
+
 export type ConfirmRideRequest = {
     customer_id: number;
     origin: string;
