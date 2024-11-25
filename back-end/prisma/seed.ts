@@ -3,7 +3,13 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Criando motoristas com avaliações associadas
+
+  const driverCount = await prisma.driver.count();
+  if(driverCount > 0) {
+    console.log('Banco de dados já contém dados. Seed não será executado.');
+    return;
+  }
+
   const homer = await prisma.driver.create({
     data: {
       name: "Homer Simpson",

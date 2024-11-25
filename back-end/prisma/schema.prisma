@@ -33,12 +33,6 @@ model Review {
   driver   Driver  @relation(fields: [driverId], references: [id])
 }
 
-model Customer {
-  id    Int       @id @default(autoincrement())
-  name  String
-  rides Ride[]   
-}
-
 model Ride {
   id          Int       @id @default(autoincrement())
   origin      String
@@ -49,6 +43,5 @@ model Ride {
   driverId    Int
   timestamp   DateTime
   value       Decimal    // Valores monetários
-  customer    Customer   @relation(fields: [customerId], references: [id])
   driver      Driver     @relation(fields: [driverId], references: [id])
 }

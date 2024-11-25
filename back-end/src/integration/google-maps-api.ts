@@ -1,5 +1,6 @@
 import axios from "axios";
 import { notFoundError } from "../errors/not-found-error";
+import { RoutesInfo } from "../types/protocols";
 
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
@@ -33,8 +34,21 @@ async function getRoutes(origin: string, destination: string) {
     return response.data;
 }
 
+async function getStaticMapImageUrl(body: RoutesInfo) {
+    const {routeResponse, origin, destination} = body;
+
+    const googleMapsUrl = `https://maps.googleapis.com/maps/api/staticmap?format=png&size=800x800&scale=2` +
+        `&path=color:0x0000ff|weight:5|enc:${routeResponse}` +
+        `&markers=color:green|label:A|${origin.latitude},${origin.longitude}` +
+        `&markers=color:red|label:B|${destination.latitude},${destination.longitude}&key=${GOOGLE_API_KEY}`;
+
+    const result = await axios.get(googleMapsUrl, {responseType: 'arraybuffer'});
+    return result.data;
+}
+
 const googleMapsApi = {
-    getRoutes
+    getRoutes,
+    getStaticMapImageUrl
 };
 
 export default googleMapsApi;

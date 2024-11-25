@@ -75,3 +75,14 @@ export type RideHistory = {
     customer_id: number;
     rides: Ride[];
 }
+
+export type Coordinates = {
+  latitude: number;
+  longitude: number;
+};
+
+export type RoutesInfo = {
+  origin: Coordinates;
+  destination: Coordinates;
+  routeResponse: string;
+};
