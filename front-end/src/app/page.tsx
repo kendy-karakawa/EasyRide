@@ -15,7 +15,8 @@ import staticMap from './public/images/staticmap.png'
 export default function Home() {
   const router = useRouter();
   const [alertList, setAlertList] = useState<AlertObj[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(false)
   const [estimateResponse, setEstimateResponse] = useState<GetRrideEstimateResponse | null>(null);
   const [routesInfo, setRoutesInfo] = useState<RoutesInfo|null>(null);
   const [estimateInfo, setEstimateInfo] = useState<GetRrideEstimateRequest>({
@@ -27,6 +28,7 @@ export default function Home() {
   async function handleGetEstimate() {
     try {
       setLoading(true);
+      setDisabled(true);
       const response: GetRrideEstimateResponse = await ApiRide.GetRrideEstimate(estimateInfo);
       setEstimateResponse(response);
       setRoutesInfo({origin: response.origin, destination: response.destination, routeResponse: response.routeResponse});
@@ -37,6 +39,7 @@ export default function Home() {
           message: error?.response?.data?.error_description,
         };
         setAlertList([...alertList, erro]);
+        setDisabled(false);
     } finally {
       setLoading(false);
     }
@@ -61,11 +64,19 @@ export default function Home() {
           message: error?.response?.data?.error_description,
         };
         setAlertList([...alertList, erro]);
-    } finally {
-      
     }
   }
-
+  
+  function clearInputs() {
+    setEstimateInfo({
+      customer_id: 0,
+      origin: "",
+      destination: "",
+    });
+    setRoutesInfo(null);
+    setEstimateResponse(null);
+    setDisabled(false);
+  }
 
   return (
     <>
@@ -81,6 +92,9 @@ export default function Home() {
               setEstimateInfo={setEstimateInfo}
               handleGetEstimate={handleGetEstimate}
               loading={loading}
+              disabled={disabled}
+              clearInputs={clearInputs}
+
             />
             <div className="w-full md:w-3/5 mt-5 md:mt-0 md:ml-5">
               <div className="flex flex-row md:flex-col gap-4 h-full overflow-x-auto scrollbar-custom">
@@ -97,9 +111,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      
-      
-      {/* <DriverCard {driver}/> */}
     </>
   );
 }

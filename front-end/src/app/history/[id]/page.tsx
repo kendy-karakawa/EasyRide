@@ -17,7 +17,7 @@ export default function History(){
     const [alertList, setAlertList] = useState<AlertObj[]>([]);
     const [drivers, setDrivers] = useState<Driver[]>([]);
 
-    const getRideHistory = async (customer_id:number, driver_id: number) => {
+    async function getRideHistory(customer_id:number, driver_id: number) {
       try {
         const result: RideHistoryResponse = driver_id === 0 ? 
           await ApiRide.GetRideHistory(customer_id) : 
@@ -33,21 +33,21 @@ export default function History(){
       }
     };
 
-    const getAllDrivers = async () => {
+    async function getAllDrivers() {
       try {
         const result: Driver[] = await APIDriver.getAllDrivers();
         setDrivers(result)
       } catch (error: any) {
         console.info(error);
       }
-    }
+    };
 
-    const applyFilters = () => {
+    function applyFilters() {
       if (customerId) {
         getRideHistory(customerId, selectedDriver);
       }
     };
-    
+
     useEffect(() => {
       if (params.id && Number(params.id) !== 0) {
         setCustomerId(Number(params.id));
@@ -61,15 +61,16 @@ export default function History(){
         <>
           <Header/>
           <div className="p-6 pt-20 min-h-[500px]">
+            {alertList.length > 0 && alertList.map((item: AlertObj, index) => (
+                  <Alert key={index} alert={item}/>
+                ) )}
             <div className=" mx-auto bg-white shadow-md rounded-lg p-6">
-              {alertList.length > 0 && alertList.map((item: AlertObj, index) => (
-                <Alert key={index} alert={item}/>
-              ) )}
-              {/* Filtros */}
+              
               <h1 className="text-2xl font-bold text-gray-800 mb-4">Histórico de Viagens</h1>
               <div className="flex flex-col md:flex-row gap-4 mb-6">
                 <input
                   type="number"
+                  value={customerId !== 0 ? customerId : ""}
                   onChange={(e) => setCustomerId(Number(e.target.value))}
                   placeholder="ID do usuário"
                   className="border border-gray-300 rounded-lg p-3 w-full md:w-1/3"
@@ -92,7 +93,6 @@ export default function History(){
                 </button>
               </div>
       
-              {/* Lista de Viagens */}
               {rides.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border border-gray-200">

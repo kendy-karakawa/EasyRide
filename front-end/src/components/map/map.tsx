@@ -8,7 +8,7 @@ export default function Map({routesInfo}: {routesInfo: RoutesInfo}) {
     const [googleMapsUrl, setGoogleMapsUrl] = useState<string | null>(null);
 
     useEffect(()=> {
-        const getStaticMapImageUrl = async() => {
+        async function getStaticMapImageUrl() {
             const response = await ApiMaps.getStaticMapImageUrl(routesInfo)
             const obj = URL.createObjectURL(response);
             setGoogleMapsUrl(obj)
