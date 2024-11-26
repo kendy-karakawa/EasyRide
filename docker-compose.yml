@@ -17,11 +17,20 @@ services:
       env_file:
         - .env
       environment:
-        DATABASE_URL: postgres://user:password@postgres:5432/database_name
+        DATABASE_URL: postgres://user:password@postgres:5432/easyRide
       ports:
         - "8080:8080"
       depends_on:
         - postgres
+
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
 
 volumes:
   postgres-volume:

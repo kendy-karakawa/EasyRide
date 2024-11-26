@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const getRideEstimateSchema = Joi.object({
-    customer_id: Joi.number().required(),
+    customer_id: Joi.number().required().not(0),
     origin: Joi.string().required(),
     destination: Joi.string().required(),
 });
