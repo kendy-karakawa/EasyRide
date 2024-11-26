@@ -62,7 +62,11 @@ export default function DriverCard({
                 <p className="text-lg font-semibold text-gray-800">{Math.floor(duration/60)} min</p>
                 </div>
                 <div>
-                <p className="text-sm text-gray-700">Distância mínima:</p>
+                <p className="text-sm text-gray-700">Distância:</p>
+                <p className="text-lg font-semibold text-gray-800">{(distance).toFixed(2).replace('.', ',')} km</p>
+                </div>
+                <div>
+                <p className="text-sm text-gray-700">Mínimo:</p>
                 <p className="text-lg font-semibold text-gray-800">{driver.minKm} km</p>
                 </div>
             </div>

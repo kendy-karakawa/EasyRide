@@ -19,8 +19,8 @@ export default function Map({routesInfo}: {routesInfo: RoutesInfo}) {
     if (!googleMapsUrl) return <div>Carregando mapa...</div>;
 
     return (
-        <div className="h-full w-full bg-red-200 rounded-lg shadow-lg p-6border border-gray-200 p-1ok">
-            <img src={googleMapsUrl} alt="Static Google Map"/>
+        <div >
+            <img src={googleMapsUrl} alt="Static Google Map" className="rounded-lg shadow-lg border border-gray-500"/>
         </div>        
     )
 }

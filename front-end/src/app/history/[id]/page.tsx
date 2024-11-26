@@ -60,7 +60,7 @@ export default function History(){
     return (
         <>
           <Header/>
-          <div className="p-6 pt-20 bg-gray-100 min-h-[500px]">
+          <div className="p-6 pt-20 min-h-[500px]">
             <div className=" mx-auto bg-white shadow-md rounded-lg p-6">
               {alertList.length > 0 && alertList.map((item: AlertObj, index) => (
                 <Alert key={index} alert={item}/>
@@ -70,7 +70,6 @@ export default function History(){
               <div className="flex flex-col md:flex-row gap-4 mb-6">
                 <input
                   type="number"
-                  value={customerId}
                   onChange={(e) => setCustomerId(Number(e.target.value))}
                   placeholder="ID do usuário"
                   className="border border-gray-300 rounded-lg p-3 w-full md:w-1/3"

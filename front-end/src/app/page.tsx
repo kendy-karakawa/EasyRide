@@ -9,6 +9,8 @@ import Header from "@/components/header/header";
 import Map from "@/components/map/map";
 import { AlertObj, ConfirmRideRequest, GetRrideEstimateRequest, GetRrideEstimateResponse, RoutesInfo, SelectDrive } from '@/types/types';
 import ApiRide from '@/services/apiRide';
+import Image from 'next/image';
+import staticMap from './public/images/staticmap.png'
 
 export default function Home() {
   const router = useRouter();
@@ -68,7 +70,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className='h-screen w-screen md:overflow-hidden p-20 bg-white'>
+      <div className='py-20 px-10'>
         {alertList.length > 0 && alertList.map((item: AlertObj, index) => (
                   <Alert key={index} alert={item}/>
                 ) )}        
@@ -80,8 +82,8 @@ export default function Home() {
               handleGetEstimate={handleGetEstimate}
               loading={loading}
             />
-            <div className="w-full md:w-3/5 h-1/2 overflow-hidden mt-5 md:mt-0">
-              <div className="flex flex-row md:flex-col gap-4 h-full overflow-x-auto md:overflow-y-auto scrollbar-custom">
+            <div className="w-full md:w-3/5 mt-5 md:mt-0 md:ml-5">
+              <div className="flex flex-row md:flex-col gap-4 h-full overflow-x-auto scrollbar-custom">
                 {estimateResponse && estimateResponse.options.length > 0 && estimateResponse.options.map((item, index)=> (
                   <DriverCard key={index} driver={item} distance={estimateResponse.distance} handleSelectDriver={handleSelectDriver} duration={estimateResponse.duration}/>
                 ))}
@@ -89,8 +91,8 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full md:w-1/2 pl-0 md:pl-6 mt-5 md:mt-0">
-            <div className="h-[300px] md:h-[800px]">
-              {routesInfo ? <Map routesInfo={routesInfo}/> : <img src='../../public/images/staticmap.png'/>}
+            <div className="h-[300px] md:h-full">
+              {routesInfo ? <Map routesInfo={routesInfo}/> : <Image src={staticMap} alt="Static Map" layout="responsive" width={500} height={500}/>}
             </div>
           </div>
         </div>
