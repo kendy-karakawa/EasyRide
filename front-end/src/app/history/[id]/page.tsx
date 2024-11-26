@@ -2,10 +2,11 @@
 
 import Header from '@/components/header/header';
 import ApiRide from '@/services/apiRide';
-import { AlertObj, RideHistory, RideHistoryResponse } from '@/types/types';
+import { AlertObj, Driver, RideHistory, RideHistoryResponse } from '@/types/types';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation'
 import Alert from '@/components/alert/alert';
+import APIDriver from '@/services/apiDriver';
 
 export default function History(){
   const params = useParams<{id: string;}>()
@@ -14,6 +15,7 @@ export default function History(){
     const [selectedDriver, setSelectedDriver] = useState<number>(0);
     const [rides, setRides]= useState<RideHistory[]>([]);
     const [alertList, setAlertList] = useState<AlertObj[]>([]);
+    const [drivers, setDrivers] = useState<Driver[]>([]);
 
     const getRideHistory = async (customer_id:number, driver_id: number) => {
       try {
@@ -31,6 +33,15 @@ export default function History(){
       }
     };
 
+    const getAllDrivers = async () => {
+      try {
+        const result: Driver[] = await APIDriver.getAllDrivers();
+        setDrivers(result)
+      } catch (error: any) {
+        console.info(error);
+      }
+    }
+
     const applyFilters = () => {
       if (customerId) {
         getRideHistory(customerId, selectedDriver);
@@ -42,6 +53,7 @@ export default function History(){
         setCustomerId(Number(params.id));
         getRideHistory(Number(params.id), 0);
       }
+      getAllDrivers();
     }, [params]);
 
 
@@ -69,9 +81,9 @@ export default function History(){
                   className="border border-gray-300 rounded-lg p-3 w-full md:w-1/3"
                 >
                   <option value="0">Todos os Motoristas</option>
-                  <option value="1">Homer Simpson</option>
-                  <option value="2">Dominic Toretto</option>
-                  <option value="3">James Bond</option>
+                  {drivers.length > 0 && drivers.map((driver, index)=> (
+                    <option key={index} value={driver.id}>{driver.name}</option>
+                  ))}
                 </select>
                 <button
                   onClick={applyFilters}
