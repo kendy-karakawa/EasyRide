@@ -28,8 +28,8 @@ Ele utiliza **Next.js** no front-end, **Node.js** no back-end, **PostgreSQL** pa
 
 1. Clone o repositório:
    ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd <EasyRide>
+   git clone https://github.com/kendy-karakawa/EasyRide.git
+   cd EasyRide
    ```
 2. Configuração do .env: Crie um arquivo .env na raiz do projeto com base no .env.example:
     ```bash
