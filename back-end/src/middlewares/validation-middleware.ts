@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ObjectSchema } from 'joi';
-import { invalidDataError } from '../errors/invalid-data-error';
+import { ApplicationError } from '../types/protocols';
 
 export function validateBody<T>(schema: ObjectSchema<T>): ValidationMiddleware {
   return validate(schema, 'body');
@@ -30,3 +30,14 @@ function validate(schema: ObjectSchema, type: 'body' | 'params' | 'query') {
 
 type ValidationMiddleware = (req: Request, res: Response, next: NextFunction) => void;
 
+function invalidDataError(details: string[]): ApplicationInvalidateDataError {
+  return {
+    error_code: "INVALID_DATA",
+    error_description: 'Os dados fornecidos no corpo da requisição são inválidos.',
+    details: details
+  };
+}
+
+type ApplicationInvalidateDataError = ApplicationError & {
+  details: string[];
+};

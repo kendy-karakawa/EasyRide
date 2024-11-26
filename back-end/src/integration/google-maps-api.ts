@@ -1,6 +1,7 @@
 import axios from "axios";
 import { notFoundError } from "../errors/not-found-error";
 import { RoutesInfo } from "../types/protocols";
+import { invalidDataError } from "../errors/invalid-data-error";
 
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
@@ -31,6 +32,7 @@ async function getRoutes(origin: string, destination: string) {
         },
     });
 
+    if (Object.keys(response.data).length === 0) throw invalidDataError("Endereço de origem e/ou de destino invalido.")
     return response.data;
 }
 

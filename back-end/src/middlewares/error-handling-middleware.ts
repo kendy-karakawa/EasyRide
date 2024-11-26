@@ -10,7 +10,7 @@ export function handleApplicationErrors(
     if (err.error_code === "INVALID_DATA") {
         res.status(400).send({
             error_code: err.error_code,
-            error_description: "Endereço de origem não pode ser igual ao endereço de destino."
+            error_description: err.error_description
         });
         return;
     }
@@ -42,8 +42,8 @@ export function handleApplicationErrors(
     }
   
     res.status(503).send({
-        error: "InternalServerError",
-        message: "Internal Server Error",
+        error_code: "INTERNAL_SERVER_ERROR",
+        error_description: "Internal Server Error",
     });
 }
 

@@ -7,7 +7,7 @@ import { ConfirmRideParams } from "../types/protocols";
 async function getEstimate(req: Request, res: Response, next: NextFunction) {
     const {customer_id, origin, destination} = req.body;
     try {
-        if (origin === destination) throw invalidDataError(['Endereço de origem não pode ser igual ao endereço de destino.']);
+        if (origin === destination) throw invalidDataError('Endereço de origem não pode ser igual ao endereço de destino.');
         const response = await rideService.getEstimate(customer_id, origin, destination);
         res.status(200).json(response);
     } catch (error) {
@@ -18,7 +18,7 @@ async function getEstimate(req: Request, res: Response, next: NextFunction) {
 async function confirmRide(req: Request, res: Response, next: NextFunction) {
     const data: ConfirmRideParams = req.body;
     try {
-        if (data.origin === data.destination) throw invalidDataError(['Endereço de origem não pode ser igual ao endereço de destino.']);
+        if (data.origin === data.destination) throw invalidDataError('Endereço de origem não pode ser igual ao endereço de destino.');
         await rideService.confirmRide(data);
         res.status(200).send({ 
             "success": true 

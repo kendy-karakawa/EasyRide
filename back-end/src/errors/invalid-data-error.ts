@@ -1,15 +1,8 @@
 import { ApplicationError } from "../types/protocols";
 
-
-export function invalidDataError(details: string[]): ApplicationInvalidateDataError {
+export function invalidDataError(description: string): ApplicationError {
   return {
     error_code: "INVALID_DATA",
-    error_description: 'Os dados fornecidos no corpo da requisição são inválidos.',
-    details: details
+    error_description: description,
   };
 }
-
-
-type ApplicationInvalidateDataError = ApplicationError & {
-  details: string[];
-};
